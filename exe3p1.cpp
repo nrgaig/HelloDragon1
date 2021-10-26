@@ -1,38 +1,79 @@
-// Created by Maor Frost 206370231
+/* Created by Maor Frost 206370231
 //  introduction for cpm-sci - Meir Komar
-//	exercise 3 task 4
-//	getting numbers and tells if they can make triangle
-//
+//	exercise 3 task 5
+//	getting numbers and print them from smallest to biggest
+*/
 
-#include<iostream>
-
+#include <iostream>
 using namespace std;
 
 int main() {
-    int side1, side2, side3;
-    char char1;
+  enum MONTHS {
+    JAN = 31,
+    FEB = 28,
+    MAR = 31,
+    APR = 30,
+    MAY = 31,
+    JUN = 30,
+    JUL = 31,
+    AUG = 31,
+    SEP = 30,
+    OCT = 31,
+    NOV = 30,
+    DEC = 31
+  };
+  int num1;
+  cout << "enter a number: " << endl;
+  cin >> num1;
 
-    cout << "enter 3 numbers:" << endl;
-    cin >> side1>>side2>> side3;
+  switch (num1) {
+  case 1:
+    cout << JAN << " days in the month" << endl;
+    break;
+  case 2:
+    cout << FEB << " days in the month" << endl;
+    break;
+  case 3:
+    cout << MAR << " days in the month" << endl;
+    break;
+  case 4:
+    cout << APR << " days in the month" << endl;
+    break;
+  case 5:
+    cout << MAY << " days in the month" << endl;
+    break;
+  case 6:
+    cout << JUN << " days in the month" << endl;
+    break;
+  case 7:
+    cout << JUL << " days in the month" << endl;
+    break;
+  case 8:
+    cout << AUG << " days in the month" << endl;
+    break;
+  case 9:
+    cout << SEP << " days in the month" << endl;
+    break;
+  case 10:
+    cout << OCT << " days in the month" << endl;
+    break;
+  case 11:
+    cout << NOV << " days in the month" << endl;
+    break;
+  case 12:
+    cout << DEC << " days in the month" << endl;
+    break;
+  default: cout<<"there is no month."<<endl;
+  }
 
-    //checking sizes
-    if (side1==side2 && side2==side3)
-    {
-        cout<< "equilateral triangle" <<endl;
-    } else if (side1==side2 || side2==side3 || side1==side3)
-    {
-        cout<< "isosceles triangle" << endl;
-    } else if (side1+side2 > side3 && side2+side3 > side1 && side1+side3 > side2)
-    {
-        cout << "scalene triangle" << endl;
-    } else cout<< "cannot form a triangle" <<endl;
 
-
-
+  return 0;
 }
-//Users/maor/CLionProjects/HelloDragon1/cmake-build-debug/Hello1
-//enter 3 numbers:
-//3 4 5
-//scalene triangle
+
+// enter a number:
+// 7
+// 31 days in the month
 //
-//Process finished with exit code 0
+// Process finished with exit code 0
+
+
