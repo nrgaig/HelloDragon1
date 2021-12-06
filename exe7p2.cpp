@@ -1,7 +1,7 @@
 /* Created by Maor Frost 206370231
  * introduction for cpm-sci - Meir Komar
  *	exercise 7 task 2
- *
+ *  take 3 arrays from user and merge them into one
  */
 
 #include <iostream>

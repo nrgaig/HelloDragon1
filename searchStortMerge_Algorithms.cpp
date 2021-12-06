@@ -95,7 +95,7 @@ void selectionSort(int *arr, int n)// selection  sort - in place  - sorts the fi
         }//  inner loop
         swap(arr, i, small);
     }//  outer loop
-}// end of insertion
+}// end of selectionSort
 
 void insertionSort(int *arr, int n)// insertion sort - in place - sorts the first n elements of arr in ascending order
 {
@@ -106,7 +106,7 @@ void insertionSort(int *arr, int n)// insertion sort - in place - sorts the firs
             arr[i] = arr[i - 1];
         arr[i] = tmp;
     }
-}// end selectionSort
+}// end insertionSort
 
 
 // Merging two sorted arrays to a third array. If the same element appears in both arrays
