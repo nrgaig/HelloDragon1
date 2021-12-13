@@ -6,94 +6,61 @@
  */
 
 #include <iostream>
+
 using namespace std;
 
-const int SIZE =80;// size of array
+const int SIZE = 80;// size of array
 
-// checking if rest of small appears in the same skip
-//parameters: skip range, big[0], small[0], size of bis and small, second elem in big and the nexter
-bool is_equal_next_skips(int skip,int const *big,int const *big_size, int *small,int const *small_size, int const *
-p_big_second,int const *p_big_next)
+
+int min_gap(int *big, const int *small, int big_size, int small_size)//another try to solve the problem
 {
-	int *p_small_third = small + 2;//pointer to third element in small
+	int i, skip;
+	int *p_big_first = big;
 
-	while(p_small_third-small<*small_size)//running until end of small
+	if (small_size == 1)//search for lone number
 	{
-
-		while (*p_big_next != *p_small_third && p_big_next - big < *big_size)//find the next small in big
-			p_big_next++;
-
-		// if current skip different from the first skip or there is no next small in big
-		if (p_big_next - p_big_second - 1 != skip || p_big_next - big == *big_size)
+		for (i = 0; i < big_size; i++)//find first small in big
 		{
-		return false;
+			if (*(big + i) == *small)
+				return 0;
+
 		}
-		// if it is the same skip continue to next
-		p_big_second=p_big_next;
-		p_big_next++;
-		p_small_third++;
-	}
-
-	return true;
-}
-
-
-//get two arrays big and small return minimal skip of small in big.
-int minSkip(int *big, int *small,int *big_size, int *small_size)
-{
-	int *p_big_first = big,*p_big_next=&big[1], *p_small = small;
-	int skip,minSkip=SIZE;
-
-	if(*small_size==1)//search for lone number
-	{
-		while (*p_big_first != *p_small && p_big_first-big < *big_size)//find first small in big
-			++p_big_first;
-		if(p_big_first-big < *big_size)
-			return 0;
-		else
-			return -1;
-
-	}
-
-
-	while (p_big_next-big < *big_size)
-	{
-		while (*p_big_first != *p_small && p_big_first-big < *big_size-1)//find first small in big
-			p_big_first++;
-
-		p_big_next = p_big_first + 1;//set last in big to be thr next element
-
-		p_small++;//next element in small
-
-		while (*p_big_next != *p_small && p_big_next-big < *big_size)//find last small in big
-			p_big_next++;
-
-		if(p_big_next-big == *big_size)//if there is no next element of small in big
-			return -1;
-
-		skip = p_big_next - p_big_first-1;//set skip range
-
-		//checking if small appears in the same skip
-		if (*small_size>2)
-			if(is_equal_next_skips(skip, big, big_size, small, small_size, p_big_next, p_big_next + 1))
-				if(skip<minSkip)// if true, checking if minSkip is the smallest skip
-					minSkip=skip;
-
-
-		//continue to next members.
-		p_big_first++;
-		p_big_next = p_big_first+1;
-	}
-	if (minSkip==SIZE)// if not found any skip return -1
 		return -1;
-	else//else return minSkip
-		return minSkip;
+	}
 
+
+	for (skip = 0; skip < big_size; skip++)//search if the skip is existing in big
+	{
+		for (i = 0; i < big_size; i++)//find first small in big
+		{
+			//finding first small in big
+			if (*(big + i) == *small)
+			{
+				p_big_first = big + i;
+				break;
+			}
+		}
+
+		// checking if rest of small appears in the same skip
+		for (i = 1; i < small_size; i++)//find the next small in big
+		{
+			//ensure that the rest of element in small appears in the same skip
+			if (*(p_big_first + skip * i) != *(small + i))
+				break;
+		}
+
+		if (i == small_size)// if we get to end of size means it appears in our skip
+			return skip - 1;
+
+	}
+
+	return -1;//if not found in any skip return -1
 
 }
+
 
 //initiate arrays with 0 for GCC
-void array_init(int arr[],int maxsize=SIZE)
+void array_init(int arr[], int maxsize = SIZE)
 {
 	for (int *p_arr = arr; p_arr - arr < maxsize; p_arr++)
 	{
@@ -101,62 +68,48 @@ void array_init(int arr[],int maxsize=SIZE)
 	}
 }
 
-void insertion(int arr[],int maxsize=SIZE)//insert values to an array
+void insertion(int arr[], int maxsize = SIZE)//insert values to an array
 {
-	bool ok;// assumes input is correct
-	do
+	// assumes input is correct
+	for (int *p_arr = arr; p_arr - arr < maxsize; p_arr++)// for every member of arr
 	{
-		ok = true;// assumes input is correct
-		for (int *p_arr = arr; p_arr - arr < maxsize; p_arr++)// for every member of arr
-		{
-			cin >> *p_arr;// input to array member using its pointer
-			if(*p_arr == 0)
-				break;
-		}
-		for (int *p_arr = arr; p_arr - arr < maxsize && *p_arr!=0; p_arr++)// for every member of arr
-		{
-			if(*p_arr<0)// if input not correct
-			{
-				cout << "ERROR" << endl;
-				ok=false;
-			}
-		}
-
-	}while(!ok);
+		cin >> *p_arr;// input to array member using its pointer
+	}
 
 }
 
 //main function.
-int main(){
+int main()
+{
 
-	int big[SIZE],small[SIZE],big_size,small_size;
+	int big[SIZE], small[SIZE], big_size, small_size;
 
 
-	for ( int element:big)//initiate arrays with 0 for GCC
+	for (int element: big)//initiate arrays with 0 for GCC
 	{
 		element = 0;
 	}
-	for ( int element:small)//initiate arrays with 0 for GCC
+	for (int element: small)//initiate arrays with 0 for GCC
 	{
 		element = 0;
 	}
 
 
-	cout <<"Enter the size of big:"<<endl;// asking from user enter size for big
-	cin >>big_size;
+	cout << "Enter the size of big:" << endl;// asking from user enter size for big
+	cin >> big_size;
 
-	cout <<"Enter "<< big_size <<" numbers:"<<endl;// asking from user enter numbers for big
-	insertion(big,big_size);
+	cout << "Enter " << big_size << " numbers:" << endl;// asking from user enter numbers for big
+	insertion(big, big_size);
 
-	cout <<"Enter the size of small:"<<endl;// asking from user enter size for small
-	cin>> small_size;
+	cout << "Enter the size of small:" << endl;// asking from user enter size for small
+	cin >> small_size;
 
-	cout <<"Enter "<< small_size <<" numbers:"<<endl;// asking from user enter numbers for small
-	insertion(small,small_size);
+	cout << "Enter " << small_size << " numbers:" << endl;// asking from user enter numbers for small
+	insertion(small, small_size);
 
 
-	cout <<"Size of jump:"<<endl;
-	cout<<minSkip(big,small,&big_size,&small_size)<<endl;
+	cout << "Size of jump:" << endl;
 
+	cout << min_gap(big, small, big_size, small_size) << endl;
 
 }
