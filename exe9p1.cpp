@@ -1,4 +1,4 @@
-/*  Created by Maor Frost 206370231 on 12/12/2021.
+/*  Created by Maor Frost 206370231 on 16/12/2021.
  *  introduction for cpm-sci - Meir Komar
  *	exercise 9 task 1
  *  class manager for institute with hybrid classes.
