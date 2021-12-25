@@ -1,2 +1,4 @@
 # HelloDragon1
-test from Frost-amd
+Student of Meir Komar
+
+Intr0duct10n t0 C0mputer Sc1ence
