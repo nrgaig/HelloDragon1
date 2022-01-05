@@ -1,13 +1,16 @@
 /*  Created by Maor Frost 206370231 on 2.1.2022.
  *  introduction for cpm-sci - Meir Komar
- *	exercise 10 task 3
- *  virtual lexicon manager
+ *	exercise 12 task 1
+ *  store manager with structs
  */
 
 #include <iostream>
+#include <cstring>
+
 using namespace std;
 
-struct Item {
+struct Item
+{
 	int pin;
 	char pName[21];
 	int amount;
@@ -16,7 +19,7 @@ struct Item {
 };
 
 // sequential-search for Item in database.
-int searchItem( Item * database, int dataNumber, int dataSrch)
+int searchItem(Item *database, int dataNumber, int dataSrch)
 {
 	for (int i = 0; i < dataNumber; i++)
 	{
@@ -25,18 +28,19 @@ int searchItem( Item * database, int dataNumber, int dataSrch)
 			return i;//return index to item
 		}
 	}
-	return -1;//else return NULL
+	return -1;//else return -1
 }
 
 
-void addItem(Item *&store,int storeSize, int &inStock)
+void addItem(Item *&store, int storeSize, int &inStock)
 {
-	Item newItem;//declare new item
+	Item newItem{};//declare new item
 
 	cout << "enter code:  \n";
 	cin >> newItem.pin;
 	cout << "enter name:\n";
-	cin.getline(newItem.pName,20);
+	cin.get();
+	cin.getline(newItem.pName, 20);
 	cout << "enter amount:\n";
 	cin >> newItem.amount;
 	cout << "enter minimum amount:\n";
@@ -44,81 +48,86 @@ void addItem(Item *&store,int storeSize, int &inStock)
 	cout << "enter price:\n";
 	cin >> newItem.price;
 
-	if (inStock < storeSize)//if there is still place for new items
+	if (inStock <= storeSize)//if there is still place for new items
 	{
-		int found=searchItem(store,inStock,newItem.pin);//finding new item in store
-		if(found>-1)//if found
+		int found = searchItem(store, inStock, newItem.pin);//finding new item in store
+
+		if (found > -1)//if found
 		{
-			if(strcmp(store[found].pName,newItem.pName)==0)//if the name is the same as in store
+			if (strcmp(store[found].pName, newItem.pName) == 0)//if the name is the same as in store
 			{
 				store[found].amount += newItem.amount;//add amount
 				store[found].minimum = newItem.minimum;//reset minimum
 				store[found].price = newItem.price;//reset price
 			}
-			else cout << "ERROR" << endl;
+			else
+			{ cout << "ERROR" << endl; }
 		}
-		else
+		else// if item not found
 		{
-			++inStock;//increase in store item number
-
+			if(inStock < storeSize)
+			{
+				store[inStock] = newItem;//add new item to store
+				++inStock;//increase inStock value
+			}
+			else
+				cout << "ERROR" << endl;
 
 		}
-
-
-		int pin;
-		//asking from user to enter Item details
-		cout << "" << endl;
-
-		cin >> pin;
-
-		if (!found)
-		{
-
-			cin.getline(store[inStock].pName, 20);
-			cin >> store[inStock].minimum >> store[inStock].price;
-		}
-		else
-
-
-			cin >> numToAdd;
-			store[found].inStock+=numToAdd;
-
 	}
 	else
-		cout <<"ERROR"<<endl;
+	{
+		cout << "ERROR" << endl;
+	}
 }//end of addItem
 
 void findPrice(Item *store, int numItems)//printing price of item
-{int pin,index;
+{
+	int pin, index;
 //getting pin of item from user
-cout << "" << endl;
-cin>>pin;
+	cout << "enter code:" << endl;
+	cin >> pin;
 //getting index of item
-index = searchItem(store,numItems,pin);
+	index = searchItem(store, numItems, pin);
 //if the item found, printing price of item
-if(index!=NULL)
-	cout << store[index].price << endl;
-else
-	cout << "ERROR"<<endl;
+	if (index > -1)
+	{
+		cout << "price:" << store[index].price << endl;
+	}
+	else
+	{
+		cout << "ERROR" << endl;
+	}
 }
 
-void sold(Item *store, int numItems)//updating stock of item
+void sold(Item *store, int numItems)//doing sell - updating stock of item
 {
-int pin,numSold;
+	int pin, numSold;
 //getting pin of item from user
-	cout << "" << endl;
-	cin>>pin;
+	cout << "enter code: " << endl;
+	cin >> pin;
 //getting number of sold items from user
-	cout << "" << endl;
-	cin>>numSold;
+	cout << "enter amount:" << endl;
+	cin >> numSold;
 
 //getting index of item
-int index = searchItem(store,numItems,pin);
+	int index = searchItem(store, numItems, pin);
 
-if(store[index].amount>numSold && index > -1 )//if there is number of items in stock more then sold
-	store[index].amount-=numSold;//updating number of item in stock
-else
-	cout << "ERROR"<<endl;
+	if (index > -1)//if item found
+	{
+		if (store[index].amount > numSold)
+		{//if there is number of items in stock more than sold
+			store[index].amount -= numSold;//updating number of item in stock
+		}
+		else
+		{
+			store[index].amount = 0;
+		}
+	}
+	else//if nor found peint error
+	{
+		cout << "ERROR" << endl;
+	}
 }
 
 void order(Item *store, int numItems)//updating stock of every item in store
@@ -126,26 +135,38 @@ void order(Item *store, int numItems)//updating stock of every item in store
 	//for every item in store
 	for (int i = 0; i < numItems; ++i)
 	{
-		if(store[i].amount<store[i].minimum)//if amount is less than minimum
-		{//printing mame of item and amount to order
-			cout << store[i].pName << " " << (store[i].minimum + 5) - store[i].amount << endl;
+		if (store[i].amount < store[i].minimum)//if amount is less than minimum
+		{//printing mame, code and amount to order of item
+			cout << "item name: " << store[i].pName << "\ncode: " << store[i].pin << "\namount to order: " <<
+			     (store[i].minimum + 5) - store[i].amount << endl;
 			store[i].amount += (store[i].minimum + 5) - store[i].amount;//update amount after order
 		}
 	}
 }
 
 
-
-void print(Item *store, int numItems)
+void print(Item *store, int numItems)//printing every item in store
 {
+	for (int i = 0; i < numItems; ++i)//for every item in store
+	{
+		cout << "name: " << store[i].pName << "\n" <<
+		     "code: " << store[i].pin << "\n" <<
+		     "amount: " << store[i].amount << "\n" <<
+		     "minimum amount: " << store[i].minimum << "\n" <<
+		     "price:" << store[i].price << endl << endl;
 
+	}
 }
 
-//main function
-enum cases{EXIT,ADD,FIND,SOLD,ORDER,PRINT};
+
+enum cases
+{
+	EXIT, ADD, FIND, SOLD, ORDER, PRINT
+};
+//main function copied from assignment word file
 int main()
 {
-	Item* store;
+	Item *store;
 	int maxItems;
 	int numItems = 0;
 	int choice;
@@ -153,31 +174,140 @@ int main()
 	cin >> maxItems;
 	store = new Item[maxItems];
 
-	do {
+	do
+	{
 		cout << "enter 0-5:\n";
 
 		cin >> choice;
 
-		switch (choice) {
-			case EXIT:	break;
-
-			case ADD:	addItem(store, maxItems, numItems);
+		switch (choice)
+		{
+			case EXIT:
 				break;
 
-			case FIND: 	findPrice(store, numItems);
+			case ADD:
+				addItem(store, maxItems, numItems);
 				break;
 
-			case SOLD:	sold(store, numItems);
+			case FIND:
+				findPrice(store, numItems);
 				break;
 
-			case ORDER:	order(store, numItems);
+			case SOLD:
+				sold(store, numItems);
 				break;
 
-			case PRINT: 	print(store, numItems);
+			case ORDER:
+				order(store, numItems);
 				break;
 
-			default: 	cout << "ERROR" << endl;
+			case PRINT:
+				print(store, numItems);
+				break;
+
+			default:
+				cout << "ERROR" << endl;
 		}
-	} while (choice != 0);
+	}
+	while (choice != 0);
 	return 0;
-}
+}// end of main
+
+//enter max number of items:
+//30
+//enter 0-5:
+//1
+//enter code:
+//1111
+//enter name:
+//asdf1
+//		enter amount:
+//8
+//enter minimum amount:
+//5
+//enter price:
+//3.45
+//enter 0-5:
+//1
+//enter code:
+//2222
+//enter name:
+//tabs
+//		enter amount:
+//10
+//enter minimum amount:
+//5
+//enter price:
+//10
+//enter 0-5:
+//1
+//enter code:
+//0000
+//enter name:
+//backspases
+//		enter amount:
+//30
+//enter minimum amount:
+//10
+//enter price:
+//0
+//enter 0-5:
+//5
+//name: asdf1
+//		code: 1111
+//amount: 8
+//minimum amount: 5
+//price:3.45
+//
+//name: tabs
+//		code: 2222
+//amount: 10
+//minimum amount: 5
+//price:10
+//
+//name: backspases
+//		code: 0
+//amount: 30
+//minimum amount: 10
+//price:0
+//
+//enter 0-5:
+//2
+//enter code:
+//2222
+//price:10
+//enter 0-5:
+//3
+//enter code:
+//1111
+//enter amount:
+//5
+//enter 0-5:
+//4
+//item name: asdf1
+//		code: 1111
+//amount to order: 7
+//enter 0-5:
+//4
+//enter 0-5:
+//5
+//name: asdf1
+//		code: 1111
+//amount: 10
+//minimum amount: 5
+//price:3.45
+//
+//name: tabs
+//		code: 2222
+//amount: 10
+//minimum amount: 5
+//price:10
+//
+//name: backspases
+//		code: 0
+//amount: 30
+//minimum amount: 10
+//price:0
+//
+//enter 0-5:
+//0
