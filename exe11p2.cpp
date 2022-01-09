@@ -8,14 +8,14 @@
 
 using namespace std;
 
-//getting array and size. returns index of smallest element in array
+//getting array and size. returns index of the smallest element in array
 int smallest(int *arr, int size)
 {
 	if (size == 1)
 	{//if subarray is only 1 member return 0
 		return 0;
 	}
-	int min = smallest(arr + 1, size - 1);//initiate min as smallest index of subarray
+	int min = smallest(arr + 1, size - 1);//initiate min as the smallest index of subarray
 	if (arr[0] < arr[min + 1])
 	{//if first member is smaller than min member return 0
 		return 0;
